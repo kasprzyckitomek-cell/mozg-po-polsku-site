@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autoryzacja TikTok — Mózg po polsku</title>
+<style>body{font-family:system-ui,sans-serif;max-width:640px;margin:3rem auto;padding:0 1rem;line-height:1.6;color:#222}code{display:block;word-break:break-all;background:#f2f2f2;padding:.6rem;border-radius:6px;margin:.5rem 0}button{padding:.5rem 1rem;font-size:1rem;cursor:pointer}</style>
+</head>
+<body>
+<h1>Autoryzacja TikTok</h1>
+<p id="status">Przetwarzanie…</p>
+<div id="box" hidden>
+<p>Skopiuj kod i wklej go w polu „code” w workflow <b>Wymiana kodu TikTok</b> w prywatnym repozytorium (zakładka Actions). Kod jest jednorazowy i krótko ważny.</p>
+<code id="code"></code>
+<button id="copy">Kopiuj kod</button>
+</div>
+<script>
+var p = new URLSearchParams(location.search);
+var s = document.getElementById('status');
+if (p.get('error')) {
+  s.textContent = 'Autoryzacja nie powiodła się: ' + (p.get('error_description') || p.get('error'));
+} else if (p.get('code')) {
+  s.textContent = 'Autoryzacja zakończona.';
+  document.getElementById('box').hidden = false;
+  document.getElementById('code').textContent = p.get('code');
+  document.getElementById('copy').onclick = function () {
+    navigator.clipboard.writeText(p.get('code')).then(function () { s.textContent = 'Skopiowano.'; });
+  };
+} else {
+  s.textContent = 'Brak kodu autoryzacji w adresie.';
+}
+</script>
+</body>
+</html>
